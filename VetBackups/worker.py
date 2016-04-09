@@ -5,13 +5,15 @@ import os
 import tarfile
 import win32serviceutil
 
-srcpath = 'c:\\Install'
+srcpath = 'c:\\Cstone'
 now = datetime.datetime.now().strftime("%m%d%Y_%H%M%S")
-dstpath = 'c:\\backups\\{0}'.format(now)
+dstpath = 'E:\\Backups\\{0}'.format(now)
 tarExt = '.gz'
 tarType = 'w:gz'
 servicename = 'TeamViewer'
-log = logger.get_logger(name='FabricLogger', path_for_log='c:\\temp', file_name='vetbackups.log')
+logpath = 'e:\\temp'
+logname = 'vetbackups.log'
+log = logger.get_logger(name='FabricLogger', path_for_log=logpath, file_name=logname)
 
 def service_info(action, service):
 
@@ -39,7 +41,7 @@ def do_copy():
         log_line = 'foldertocopy="{0} backupdest="{1}'.format(srcpath,dstpath)
         log.info(log_line)
         shutil.copytree(srcpath,dstpath)
-        make_tarfile(dstpath)
+        #make_tarfile(dstpath)
     except Exception as ex:
         template = "An exception of type {0} has occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
@@ -63,10 +65,10 @@ def make_tarfile(tarpath):
 
 
 def main():
-    out = service_info('status',servicename)
-    if out == "notrunning":
-        service_info('start',servicename)
-    #do_copy()
+    #out = service_info('status',servicename)
+    #if out == "running":
+        #service_info('start',servicename)
+    do_copy()
 
 if __name__ == '__main__':
     main()
